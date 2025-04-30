@@ -6,20 +6,40 @@
 //
 
 import UIKit
+import Combine
 
 protocol DetailsBusinessLogic {
     func fetchCharacterDetail()
 }
 
 protocol DetailsDataStore {
-    var character: CharacterModel? { get set }
+    var characterId: Int? { get set }
 }
 
 class DetailsInteractor: DetailsBusinessLogic, DetailsDataStore {
-    func fetchCharacterDetail() {
-        
-    }
-    
+
     var presenter: DetailsPresentationLogic?
-    var character: CharacterModel?
+
+    var characterId: Int?
+
+    var worker: DetailsWorker?
+
+    private var cancellables = Set<AnyCancellable>()
+
+    func fetchCharacterDetail() {
+        if let id = characterId {
+            worker?.fetchCharacterDetails(id: id)
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        print("❌ Error:", error)
+                    }
+                } receiveValue: { [weak self] response in
+                    guard let self else { return }
+                    let responseModel = DetailsModel.Response(character: response)
+                    presenter?.presentCharacterDetails(response: responseModel)
+                }
+                .store(in: &cancellables)
+        }
+    }
 }

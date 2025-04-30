@@ -8,18 +8,13 @@
 import UIKit
 
 enum DetailsModel {
-    struct Request {
-
-    }
+    struct Request { }
 
     struct Response {
         let character: CharacterModel
     }
 
     struct ViewModel {
-        let name: String
-        let species: String
-        let imageURL: String
+        let character: CharacterModel
     }
 }
-

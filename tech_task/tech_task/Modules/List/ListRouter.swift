@@ -16,10 +16,26 @@ protocol ListDataPassing {
 }
 
 class ListRouter: NSObject, ListRoutingLogic, ListDataPassing {
-    func routeToCharacterDetail() {
-        
-    }
-    
     weak var viewController: ListViewController?
     var dataStore: ListDataStore?
+
+    func routeToCharacterDetail() {
+        let destinationVC = DetailsViewController()
+        let destinationDS = DetailsInteractor()
+        let presenter = DetailsPresenter()
+        let router = DetailsRouter()
+        
+
+        destinationVC.interactor = destinationDS
+        destinationVC.router = router
+        destinationDS.presenter = presenter
+        destinationDS.worker = DetailsWorker()
+        presenter.viewController = destinationVC
+        router.viewController = destinationVC
+        router.dataStore = destinationDS
+
+        destinationDS.characterId = dataStore?.selectedCharacter?.id
+        viewController?.navigationItem.backButtonTitle = ""
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
 }

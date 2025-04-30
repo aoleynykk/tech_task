@@ -32,12 +32,12 @@ extension ApiEndpoint {
         if !path.isEmpty {
             longPath.append("/")
             longPath.append(path)
-            longPath.append("/")
         }
 
         urlComponents?.path = longPath
 
         if let queryForCalls = queryForCall {
+            urlComponents?.path.append("/")
             urlComponents?.queryItems = [URLQueryItem]()
             for queryForCall in queryForCalls {
                 urlComponents?.queryItems?.append(URLQueryItem(name: queryForCall.name, value: queryForCall.value))

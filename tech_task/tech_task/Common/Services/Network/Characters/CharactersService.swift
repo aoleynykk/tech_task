@@ -23,7 +23,7 @@ class CharactersService {
             .eraseToAnyPublisher()
     }
 
-    func getCharacter(id: Int) -> AnyPublisher<CharacterModel, Error> {
+    func getCharacterDetails(id: Int) -> AnyPublisher<CharacterModel, Error> {
         return httpClient
             .publisher(request: CharactersProvider.getCharacter(id: id).makeRequest)
             .tryMap(GenericAPIHTTPRequestMapper.map)

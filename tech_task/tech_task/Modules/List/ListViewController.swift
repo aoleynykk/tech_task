@@ -62,6 +62,11 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UITabl
         return cell
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        interactor?.selectCharacter(at: indexPath.row)
+        router?.routeToCharacterDetail()
+    }
+
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         if indexPaths.contains(where: { $0.row >= characters.count - 1 }) {
             interactor?.fetchCharacters()

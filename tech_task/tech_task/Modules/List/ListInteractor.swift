@@ -19,13 +19,8 @@ protocol ListDataStore {
 }
 
 class ListInteractor: ListBusinessLogic, ListDataStore {
-    func selectCharacter(at index: Int) {
-        
-    }
-    
-    var selectedCharacter: CharacterModel?
-    
 
+    var selectedCharacter: CharacterModel?
     var presenter: ListPresentationLogic?
     var worker: ListWorker?
 
@@ -63,5 +58,10 @@ class ListInteractor: ListBusinessLogic, ListDataStore {
                 presenter?.presentCharacters(response: responseModel)
             }
             .store(in: &cancellables)
+    }
+
+    func selectCharacter(at index: Int) {
+        guard index < characters.count else { return }
+        selectedCharacter = characters[index]
     }
 }

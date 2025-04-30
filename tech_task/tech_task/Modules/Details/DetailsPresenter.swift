@@ -8,13 +8,14 @@
 import UIKit
 
 protocol DetailsPresentationLogic {
-    func presentCharacterDetail(response: DetailsModel.Response)
+    func presentCharacterDetails(response: DetailsModel.Response)
 }
 
 class DetailsPresenter: DetailsPresentationLogic {
-    func presentCharacterDetail(response: DetailsModel.Response) {
-        
-    }
-    
     weak var viewController: DetailsDisplayLogic?
+
+    func presentCharacterDetails(response: DetailsModel.Response) {
+        let viewModel = DetailsModel.ViewModel(character: response.character)
+        viewController?.displayCharacter(viewModel: viewModel)
+    }
 }
