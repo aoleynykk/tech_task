@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  tech_task
 //
-//  Created by Олександр Олійник on 30.04.2025.
+//  Created by Alex Oliynyk on 30.04.2025.
 //
 
 import UIKit
