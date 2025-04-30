@@ -7,22 +7,40 @@
 
 import UIKit
 
+import UIKit
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    var coordinator: AppCoordinator?
-
-    func scene(_ scene: UIScene,
-               willConnectTo session: UISceneSession,
-               options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        let navController = UINavigationController()
-        coordinator = AppCoordinator(navigationController: navController)
-        coordinator?.start()
-
         window = UIWindow(windowScene: windowScene)
+
+        let characterListVC = ListViewController()
+
+        let interactor = ListInteractor()
+        let presenter = ListPresenter()
+        let router = ListRouter()
+        let worker = ListWorker()
+
+        characterListVC.interactor = interactor
+        characterListVC.router = router
+
+        interactor.presenter = presenter
+        interactor.worker = worker
+
+        presenter.viewController = characterListVC
+
+        router.viewController = characterListVC
+        router.dataStore = interactor
+
+        let navController = UINavigationController(rootViewController: characterListVC)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
