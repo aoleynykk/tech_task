@@ -18,8 +18,8 @@ enum APIHTTPMethod: String {
 protocol ApiEndpoint {
     var baseURLString: String { get }
     var apiPath: String { get }
+    var path: String { get }
     var queryForCall: [URLQueryItem]? { get }
-    var params: [String: Any]? { get }
     var method: APIHTTPMethod { get }
 }
 
@@ -28,6 +28,12 @@ extension ApiEndpoint {
         var urlComponents = URLComponents(string: baseURLString)
         var longPath = "/"
         longPath.append(apiPath)
+
+        if !path.isEmpty {
+            longPath.append("/")
+            longPath.append(path)
+            longPath.append("/")
+        }
 
         urlComponents?.path = longPath
 
@@ -40,11 +46,6 @@ extension ApiEndpoint {
         guard let url = urlComponents?.url else { return URLRequest(url: URL(string: baseURLString)!) }
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-
-        if let params = params {
-            let paramsData = try? JSONSerialization.data(withJSONObject: params)
-            request.httpBody = paramsData
-        }
 
         print("--------->" + "\(request.url)")
         return request

@@ -56,7 +56,7 @@ struct GenericAPIHTTPRequestMapper {
     static func map<T>(data: Data, response: HTTPURLResponse) throws -> T where T: Decodable {
         if (200..<300) ~= response.statusCode {
 
-            print("ℹ️ Response Data for decoding: \(String(data: data, encoding: .utf8) ?? "No Data")")
+//            print("ℹ️ Response Data for decoding: \(String(data: data, encoding: .utf8) ?? "No Data")")
             if T.self == String.self,
                let stringResponse = String(data: data, encoding: .utf8) {
                 return stringResponse as! T
@@ -69,7 +69,11 @@ struct GenericAPIHTTPRequestMapper {
 
             do {
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+
+                decoder.dateDecodingStrategy = .formatted(formatter)
                 return try decoder.decode(T.self, from: data)
             } catch {
                 let decodingError = error as! DecodingError

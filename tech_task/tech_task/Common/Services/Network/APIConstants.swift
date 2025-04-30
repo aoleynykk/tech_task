@@ -8,6 +8,6 @@ import Foundation
 
 enum APIConstants {
     static var baseURL: String {
-        return "https://rickandmortyapi.com/api"
+        return "https://rickandmortyapi.com"
     }
 }

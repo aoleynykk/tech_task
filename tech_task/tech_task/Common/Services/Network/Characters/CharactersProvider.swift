@@ -14,16 +14,13 @@ enum CharactersProvider {
 }
 
 extension CharactersProvider: ApiEndpoint {
+
     var baseURLString: String {
         return APIConstants.baseURL
     }
 
     var apiPath: String {
-        return "users"
-    }
-
-    var separatorPath: String? {
-        return nil
+        return "api"
     }
 
     var path: String {
@@ -35,10 +32,6 @@ extension CharactersProvider: ApiEndpoint {
         }
     }
 
-    var headers: [String : String]? {
-        return ["Content-Type": "application/json"]
-    }
-
     var queryForCall: [URLQueryItem]? {
         switch self {
         case .getCharacters(let page):
@@ -48,15 +41,7 @@ extension CharactersProvider: ApiEndpoint {
         }
     }
 
-    var params: [String : Any]? {
-        return nil
-    }
-
     var method: APIHTTPMethod {
         return .GET
-    }
-
-    var customDataBody: Data? {
-        return nil
     }
 }

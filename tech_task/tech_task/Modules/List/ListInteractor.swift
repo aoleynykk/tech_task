@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 protocol ListBusinessLogic {
     func fetchCharacters()
@@ -18,16 +19,49 @@ protocol ListDataStore {
 }
 
 class ListInteractor: ListBusinessLogic, ListDataStore {
-    func fetchCharacters() {
-
-    }
-    
     func selectCharacter(at index: Int) {
         
     }
     
+    var selectedCharacter: CharacterModel?
+    
+
     var presenter: ListPresentationLogic?
     var worker: ListWorker?
+
+    private var cancellables = Set<AnyCancellable>()
+    private var currentPage: Int = 1
+    private var canLoadMore = true
+    private var isLoading = false
+
     var characters: [CharacterModel] = []
-    var selectedCharacter: CharacterModel?
+
+    func fetchCharacters() {
+        guard canLoadMore, !isLoading else { return }
+        isLoading = true
+
+        worker?.fetchCharacters(page: currentPage)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                if case .failure(let error) = completion {
+                    print("❌ Error:", error)
+                }
+            } receiveValue: { [weak self] response in
+                guard let self else { return }
+
+                let oldCount = characters.count
+                characters.append(contentsOf: response.results)
+                canLoadMore = response.info.next != nil
+                currentPage += 1
+
+                let responseModel = ListModel.Response(
+                    characters: characters,
+                    newItems: response.results,
+                    oldCount: oldCount
+                )
+                presenter?.presentCharacters(response: responseModel)
+            }
+            .store(in: &cancellables)
+    }
 }

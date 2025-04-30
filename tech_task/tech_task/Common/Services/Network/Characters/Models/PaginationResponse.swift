@@ -7,10 +7,6 @@
 
 import Foundation
 
-struct PaginationResponse: Codable {
-    let info: PageInfo
-}
-
 struct PageInfo: Codable {
     let count: Int
     let pages: Int

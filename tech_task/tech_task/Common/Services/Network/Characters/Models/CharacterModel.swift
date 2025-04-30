@@ -13,18 +13,13 @@ struct CharacterModel: Codable {
     let status: String
     let species: String
     let type: String
-    let gender: Gender
+    let gender: String
     let origin: Origin
     let location: Location
     let image: String
     let episode: [String]
     let url: String
     let created: Date
-}
-
-enum Gender: String, Codable {
-    case male = "Male"
-    case female = "Female"
 }
 
 struct Origin: Codable {

@@ -8,6 +8,6 @@
 import Foundation
 
 struct CharactersResponseModel: Codable {
-    let info: PaginationResponse
+    let info: PageInfo
     let results: [CharacterModel]
 }

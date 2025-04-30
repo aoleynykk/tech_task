@@ -5,11 +5,13 @@
 //  Created by Alex Oliynyk on 30.04.2025.
 //
 
-import UIKit
+import Foundation
+import Combine
 
 class ListWorker {
-    func fetchCharacters(completion: @escaping ([CharacterModel]) -> Void) {
+    private let service = CharactersService(httpClient: HTTPClientDecorator(client: URLSession.shared))
 
+    func fetchCharacters(page: Int) -> AnyPublisher<CharactersResponseModel, Error> {
+        return service.getCharacters(page: page)
     }
 }
-
