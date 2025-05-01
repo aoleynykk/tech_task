@@ -98,7 +98,6 @@ class DetailsView: UIView {
         imageView.addSubview(activityIndicator)
         paddedContainer.addSubview(infoStack)
 
-        // Replace fixed height = width with constraint with priority
         let aspect = imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor)
         aspect.priority = .defaultHigh
         imageAspectRatioConstraint = aspect
@@ -119,7 +118,7 @@ class DetailsView: UIView {
             imageView.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
 
-            aspect, // This one replaces fixed strict ratio
+            aspect,
 
             activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),

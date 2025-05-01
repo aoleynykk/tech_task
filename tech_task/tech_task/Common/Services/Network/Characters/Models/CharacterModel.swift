@@ -20,6 +20,10 @@ struct CharacterModel: Codable {
     let episode: [String]
     let url: String
     let created: Date
+
+    static var emptyCharacter: CharacterModel {
+        return CharacterModel(id: 0, name: "", status: "", species: "", type: "", gender: "", origin: Origin(name: "", url: ""), location: Location(name: "", url: ""), image: "", episode: [], url: "", created: Date.now)
+    }
 }
 
 struct Origin: Codable {

@@ -11,7 +11,12 @@ import Combine
 class ListWorker {
     private let service = CharactersService(httpClient: HTTPClientDecorator(client: URLSession.shared))
 
-    func fetchCharacters(page: Int) -> AnyPublisher<CharactersResponseModel, Error> {
+    func fetchCharacters(page: Int) -> AnyPublisher<CharactersResponseModel, Never> {
         return service.getCharacters(page: page)
+            .map { $0 }
+            .catch { _ in
+                Just(self.service.getCachedCharactersResponse())
+            }
+            .eraseToAnyPublisher()
     }
 }

@@ -6,8 +6,30 @@
 //
 
 import UIKit
+import Foundation
+import CoreData
 
-import UIKit
+final class StringArrayTransformer: NSSecureUnarchiveFromDataTransformer {
+    override static var allowedTopLevelClasses: [AnyClass] {
+        return [NSArray.self, NSString.self]
+    }
+
+    static func register() {
+        let className = String(describing: StringArrayTransformer.self)
+        ValueTransformer.setValueTransformer(StringArrayTransformer(), forName: NSValueTransformerName(className))
+    }
+}
+
+final class StringTransformer: NSSecureUnarchiveFromDataTransformer {
+    override static var allowedTopLevelClasses: [AnyClass] {
+        return [NSString.self]
+    }
+
+    static func register() {
+        let className = String(describing: StringTransformer.self)
+        ValueTransformer.setValueTransformer(StringTransformer(), forName: NSValueTransformerName(className))
+    }
+}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -21,6 +43,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
+
+        StringArrayTransformer.register()
+        StringTransformer.register()
 
         let characterListVC = ListViewController()
 

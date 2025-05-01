@@ -20,6 +20,9 @@ class CharactersService {
         return httpClient
             .publisher(request: CharactersProvider.getCharacters(page: page).makeRequest)
             .tryMap(GenericAPIHTTPRequestMapper.map)
+            .handleEvents(receiveOutput: { response in
+                response.results.forEach { CoreDataManager.shared.save(character: $0) }
+            })
             .eraseToAnyPublisher()
     }
 
@@ -27,6 +30,19 @@ class CharactersService {
         return httpClient
             .publisher(request: CharactersProvider.getCharacter(id: id).makeRequest)
             .tryMap(GenericAPIHTTPRequestMapper.map)
+            .handleEvents(receiveOutput: { character in
+                CoreDataManager.shared.save(character: character)
+            })
             .eraseToAnyPublisher()
     }
-}
+
+    func getCachedCharactersResponse() -> CharactersResponseModel {
+         let cached = CoreDataManager.shared.fetchAllCharacters()
+         let pageInfo = PageInfo(count: cached.count, pages: 1, next: nil, prev: nil)
+         return CharactersResponseModel(info: pageInfo, results: cached)
+     }
+
+    func getCachedCharacter(id: Int) -> CharacterModel? {
+        return CoreDataManager.shared.fetchCharacter(withId: id)
+    }
+} 
